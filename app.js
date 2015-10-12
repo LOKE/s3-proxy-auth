@@ -3,6 +3,10 @@ var logger = require('morgan');
 var path = require('path');
 var routes = require('./routes/index');
 var favicon = require('serve-favicon');
+var basicAuth = require('basic-auth');
+
+var users = require('./users.json');
+var buckets = require('./buckets.json');
 
 var app = express();
 
@@ -13,6 +17,26 @@ app.set('view engine', 'hjs');
 app.use(logger('dev'));
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
+
+app.use(function auth(req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  };
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  };
+
+  if (users[user.name] && users[user.name].password === user.pass) {
+    req.user = users[user.name];
+    return next();
+  } else {
+    return unauthorized(res);
+  };
+});
 
 app.use('/', routes);
 

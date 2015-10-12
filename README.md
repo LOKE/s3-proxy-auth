@@ -1,5 +1,43 @@
 # Authentication Proxy For S3 Buckets
 
+Proxies requests to S3 buckets provided the HTTP request authenticates with
+
+Config is very limited for now...
+
+Place a `users.json` inside the project folder in the following format:
+
+```json
+{
+  "SomeUsername": {
+    "password": "PasswordForBasicAuth",
+    "s3key": "ThisIsYourS3Key",
+    "s3secret": "ThisIsYourS3Secret",
+    "s3bucket": "ThisIsTheBucketName"
+  }
+}
+```
+
+Each user maps to a set of S3 credentials.
+
+Also make a `buckets.json` and define all of the buckets:
+
+```json
+{
+  "yourbucketalias": {
+    "name": "the-actual-s3-bucket-name",
+    "region": "the-region-this-bucket-is-in"
+  }
+}
+```
+
+
+
+
+
+
+
+
+
 Amazon offers a very easy to implement [static website hosting option](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)
 for S3 buckets. Since it is a completely static option though, all files are exposed to the public Internet (no authentication option)
 
@@ -25,7 +63,7 @@ Add your AWS Key and secret to `./config/aws.config.json`
     $ sudo ln -s /usr/bin/nodejs /usr/bin/node
     $ cp ./config/aws.config.dist.json ./config/aws.config.json
     $ vi config/aws.config.json
-    
+
 
 ## Run
 
