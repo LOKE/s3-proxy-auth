@@ -2,15 +2,19 @@ var express = require('express');
 var router = express.Router();
 var AWS = require('aws-sdk');
 
+var buckets = require('../buckets.json');
+
 /* GET home page. */
 router.get(/^\/([^\/]*)\/(.+)/, function (req, res) {
 
   var bucketName = req.params[0];
   var objectName = req.params[1];
 
-  AWS.config.loadFromPath('./config/aws.config.json');
+  var bucket = buckets[bucketName];
+
+  AWS.config.update({accessKeyId: req.user.s3key, secretAccessKey: req.user.s3secret, region: bucket.region});
   var s3 = new AWS.S3();
-  var request = s3.getObject({Bucket: bucketName, Key: objectName});
+  var request = s3.getObject({Bucket: bucket.name, Key: objectName});
   var piped = false;
 
   request.createReadStream()

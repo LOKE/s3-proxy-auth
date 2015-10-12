@@ -4,7 +4,7 @@ var path = require('path');
 var routes = require('./routes/index');
 var favicon = require('serve-favicon');
 var basicAuth = require('basic-auth');
-
+var cors = require('cors');
 var users = require('./users.json');
 var buckets = require('./buckets.json');
 
@@ -14,6 +14,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 
+app.use(cors());
 app.use(logger('dev'));
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
