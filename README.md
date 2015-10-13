@@ -11,8 +11,7 @@ Place a `users.json` inside the project folder in the following format:
   "SomeUsername": {
     "password": "PasswordForBasicAuth",
     "s3key": "ThisIsYourS3Key",
-    "s3secret": "ThisIsYourS3Secret",
-    "s3bucket": "ThisIsTheBucketName"
+    "s3secret": "ThisIsYourS3Secret"
   }
 }
 ```
