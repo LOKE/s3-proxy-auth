@@ -4,19 +4,20 @@ var AWS = require('aws-sdk');
 
 var buckets = require('../buckets.json');
 
+router.get('/', function (req, res) {
+  var bucketName = buckets.default.name;
+  var objectName = buckets.default.object;
+  proxyRequest(bucketName, objectName, req, res);
+});
+
 /* GET home page. */
 router.get(/^\/([^\/]*)\/(.+)/, function (req, res) {
-
   var bucketName = req.params[0];
   var objectName = req.params[1];
+  proxyRequest(bucketName, objectName, req, res);
+});
 
-  console.log(bucketName, objectName);
-
-  if (!bucketName) {
-    bucketName = buckets.default.name;
-    objectName = buckets.default.object;
-  }
-
+function proxyRequest(bucketName, objectName, req, res) {
   var bucket = buckets[bucketName];
 
   AWS.config.update({accessKeyId: req.user.s3key, secretAccessKey: req.user.s3secret, region: bucket.region});
@@ -42,6 +43,6 @@ router.get(/^\/([^\/]*)\/(.+)/, function (req, res) {
       res.end('There was an Error: ' + (error.toString()));
     });
 
-});
+}
 
 module.exports = router;
