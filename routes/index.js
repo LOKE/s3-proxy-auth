@@ -9,6 +9,9 @@ router.get(/^\/([^\/]*)\/(.+)/, function (req, res) {
 
   var bucketName = req.params[0];
   var objectName = req.params[1];
+  if (!bucketName) {
+    bucketName = buckets.default;
+  }
 
   var bucket = buckets[bucketName];
 
