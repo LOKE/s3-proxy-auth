@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var AWS = require('aws-sdk');
+var DEFAULT_OBJECT = 'index.html';
 
 var buckets = require('../buckets.json');
 
 router.get('/', function (req, res) {
-  var bucketName = buckets.default.name;
-  var objectName = buckets.default.object;
-  proxyRequest(bucketName, objectName, req, res);
+  var bucketName = buckets.default;
+  proxyRequest(bucketName, DEFAULT_OBJECT, req, res);
 });
 
 /* GET home page. */
@@ -19,6 +19,7 @@ router.get(/^\/([^\/]*)\/(.+)/, function (req, res) {
 
 function proxyRequest(bucketName, objectName, req, res) {
   var bucket = buckets[bucketName];
+  objectName = objectName || DEFAULT_OBJECT;
 
   AWS.config.update({accessKeyId: req.user.s3key, secretAccessKey: req.user.s3secret, region: bucket.region});
   var s3 = new AWS.S3();
