@@ -17,6 +17,11 @@ router.get(/^\/([^\/]*)\/(.+)/, function (req, res) {
   proxyRequest(bucketName, objectName, req, res);
 });
 
+router.get('/:bucket', function (req, res) {
+  var bucketName = req.params.bucket;
+  proxyRequest(bucketName, DEFAULT_OBJECT, req, res);
+});
+
 function proxyRequest(bucketName, objectName, req, res) {
   var bucket = buckets[bucketName];
   objectName = objectName || DEFAULT_OBJECT;
